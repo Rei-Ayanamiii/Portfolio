@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Your Name | Portfolio</title>
+  <title>Mori Lopez | Portfolio</title>
 
   <style>
     body {
@@ -94,7 +94,7 @@
 
   <header>
     <h1>Your Name</h1>
-    <p>Your Title (e.g. Web Developer)</p>
+    <p>IT Support Staff</p>
   </header>
 
   <nav>
@@ -105,7 +105,7 @@
 
   <section id="about">
     <h2>About Me</h2>
-    <p>Write something about yourself here.</p>
+    <p>I Always Live</p>
   </section>
 
   <section id="projects">
