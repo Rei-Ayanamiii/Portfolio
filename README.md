@@ -9,32 +9,22 @@ portfolio_html = '''<!DOCTYPE html>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #0a0a0f;
-            --secondary: #12121a;
-            --accent: #00d4aa;
-            --accent-glow: rgba(0, 212, 170, 0.3);
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0b0;
-            --gradient-1: linear-gradient(135deg, #00d4aa 0%, #00a8e8 100%);
-            --gradient-2: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--primary);
-            color: var(--text-primary);
-            overflow-x: hidden;
+            background: #0a0a0f;
+            color: #ffffff;
             line-height: 1.6;
         }
 
@@ -43,16 +33,120 @@ portfolio_html = '''<!DOCTYPE html>
             font-weight: 600;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* Full Screen Sections */
+        section {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
-        ::-webkit-scrollbar-track {
-            background: var(--secondary);
+
+        /* Animated Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 4px;
+
+        /* Gradient Overlay */
+        .gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 170, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0, 168, 232, 0.05) 0%, transparent 70%);
+            z-index: 1;
+            pointer-events: none;
+            animation: gradientShift 15s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: rgba(0, 212, 170, 0.3);
+            top: -200px;
+            right: -200px;
+            animation: float1 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(102, 126, 234, 0.3);
+            bottom: -150px;
+            left: -150px;
+            animation: float2 25s ease-in-out infinite;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: rgba(0, 168, 232, 0.2);
+            top: 50%;
+            left: 50%;
+            animation: float3 18s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, 50px) scale(1.1); }
+            66% { transform: translate(-30px, 20px) scale(0.9); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-40px, -60px) scale(1.2); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.3); }
+        }
+
+        /* Grid Lines */
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+            background-size: 100px 100px;
+            z-index: 1;
+            pointer-events: none;
+            animation: gridScroll 20s linear infinite;
+        }
+
+        @keyframes gridScroll {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 100px); }
         }
 
         /* Navigation */
@@ -65,7 +159,7 @@ portfolio_html = '''<!DOCTYPE html>
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            background: rgba(10, 10, 15, 0.8);
+            background: rgba(10, 10, 15, 0.6);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
@@ -73,34 +167,17 @@ portfolio_html = '''<!DOCTYPE html>
 
         nav.scrolled {
             padding: 1rem 5%;
-            background: rgba(10, 10, 15, 0.95);
+            background: rgba(10, 10, 15, 0.9);
         }
 
         .logo {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 1.5rem;
             font-weight: 700;
-            background: var(--gradient-1);
+            background: linear-gradient(135deg, #00d4aa 0%, #00a8e8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
             cursor: pointer;
-            position: relative;
-        }
-
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gradient-1);
-            transition: width 0.3s ease;
-        }
-
-        .logo:hover::after {
-            width: 100%;
         }
 
         .nav-links {
@@ -110,7 +187,7 @@ portfolio_html = '''<!DOCTYPE html>
         }
 
         .nav-links a {
-            color: var(--text-secondary);
+            color: #a0a0b0;
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
@@ -125,106 +202,35 @@ portfolio_html = '''<!DOCTYPE html>
             left: 0;
             width: 0;
             height: 2px;
-            background: var(--accent);
+            background: #00d4aa;
             transition: width 0.3s ease;
         }
 
         .nav-links a:hover {
-            color: var(--text-primary);
+            color: #ffffff;
         }
 
         .nav-links a:hover::before {
             width: 100%;
         }
 
-        .mobile-menu {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-        }
-
-        .mobile-menu span {
-            width: 25px;
-            height: 2px;
-            background: var(--text-primary);
-            transition: all 0.3s ease;
+        /* Content Wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
         }
 
         /* Hero Section */
         .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            padding: 0 5%;
-        }
-
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .grid-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: gridMove 20s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-
-        .glow-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-            animation: float 10s ease-in-out infinite;
-        }
-
-        .glow-orb:nth-child(1) {
-            width: 400px;
-            height: 400px;
-            background: var(--accent);
-            top: -100px;
-            right: -100px;
-            animation-delay: 0s;
-        }
-
-        .glow-orb:nth-child(2) {
-            width: 300px;
-            height: 300px;
-            background: #667eea;
-            bottom: -50px;
-            left: -50px;
-            animation-delay: -5s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(30px, -30px) scale(1.1); }
+            z-index: 10;
         }
 
         .hero-content {
-            position: relative;
-            z-index: 1;
             text-align: center;
             max-width: 900px;
+            padding: 0 5%;
+            animation: fadeInUp 1s ease;
         }
 
         .hero-badge {
@@ -236,7 +242,7 @@ portfolio_html = '''<!DOCTYPE html>
             border: 1px solid rgba(0, 212, 170, 0.3);
             border-radius: 50px;
             font-size: 0.85rem;
-            color: var(--accent);
+            color: #00d4aa;
             margin-bottom: 2rem;
             animation: fadeInUp 0.8s ease;
         }
@@ -244,7 +250,7 @@ portfolio_html = '''<!DOCTYPE html>
         .status-dot {
             width: 8px;
             height: 8px;
-            background: var(--accent);
+            background: #00d4aa;
             border-radius: 50%;
             animation: pulse 2s ease-in-out infinite;
         }
@@ -255,22 +261,21 @@ portfolio_html = '''<!DOCTYPE html>
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-size: clamp(3rem, 8vw, 5rem);
             line-height: 1.1;
             margin-bottom: 1.5rem;
             animation: fadeInUp 0.8s ease 0.2s both;
         }
 
         .hero h1 span {
-            background: var(--gradient-1);
+            background: linear-gradient(135deg, #00d4aa 0%, #00a8e8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .hero-subtitle {
             font-size: 1.25rem;
-            color: var(--text-secondary);
+            color: #a0a0b0;
             margin-bottom: 2.5rem;
             max-width: 600px;
             margin-left: auto;
@@ -300,24 +305,24 @@ portfolio_html = '''<!DOCTYPE html>
         }
 
         .btn-primary {
-            background: var(--gradient-1);
-            color: var(--primary);
+            background: linear-gradient(135deg, #00d4aa 0%, #00a8e8 100%);
+            color: #0a0a0f;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px var(--accent-glow);
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.3);
         }
 
         .btn-secondary {
             background: transparent;
-            color: var(--text-primary);
+            color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.05);
-            border-color: var(--accent);
+            border-color: #00d4aa;
             transform: translateY(-2px);
         }
 
@@ -330,9 +335,10 @@ portfolio_html = '''<!DOCTYPE html>
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
-            color: var(--text-secondary);
+            color: #a0a0b0;
             font-size: 0.8rem;
             animation: bounce 2s ease-in-out infinite;
+            z-index: 10;
         }
 
         @keyframes bounce {
@@ -351,72 +357,29 @@ portfolio_html = '''<!DOCTYPE html>
             }
         }
 
-        /* Stats Section */
-        .stats {
-            padding: 4rem 5%;
-            background: var(--secondary);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 1.5rem;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            background: rgba(0, 212, 170, 0.05);
-        }
-
-        .stat-number {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
         /* About Section */
         .about {
-            padding: 8rem 5%;
-            position: relative;
+            background: rgba(18, 18, 26, 0.8);
+            backdrop-filter: blur(10px);
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 5%;
+            width: 100%;
         }
 
         .section-header {
             margin-bottom: 4rem;
+            text-align: center;
         }
 
         .section-tag {
             display: inline-block;
             padding: 0.25rem 0.75rem;
             background: rgba(0, 212, 170, 0.1);
-            color: var(--accent);
+            color: #00d4aa;
             font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
@@ -438,7 +401,7 @@ portfolio_html = '''<!DOCTYPE html>
         }
 
         .about-text {
-            color: var(--text-secondary);
+            color: #a0a0b0;
             font-size: 1.1rem;
             line-height: 1.8;
         }
@@ -455,30 +418,19 @@ portfolio_html = '''<!DOCTYPE html>
             position: relative;
             border-radius: 20px;
             overflow: hidden;
-            background: var(--secondary);
+            background: #12121a;
             aspect-ratio: 4/5;
+            border: 1px solid rgba(0, 212, 170, 0.2);
         }
 
-        .image-wrapper::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--gradient-1);
-            opacity: 0.1;
-            z-index: 1;
-        }
-
-        .image-wrapper img {
+        .image-wrapper > div {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            filter: grayscale(20%);
-            transition: all 0.5s ease;
-        }
-
-        .image-wrapper:hover img {
-            filter: grayscale(0%);
-            transform: scale(1.05);
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 50%, #16213e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
         }
 
         .experience-cards {
@@ -491,7 +443,7 @@ portfolio_html = '''<!DOCTYPE html>
         }
 
         .exp-card {
-            background: var(--primary);
+            background: #0a0a0f;
             padding: 1rem 1.5rem;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -516,7 +468,7 @@ portfolio_html = '''<!DOCTYPE html>
         .exp-icon {
             width: 40px;
             height: 40px;
-            background: var(--gradient-1);
+            background: linear-gradient(135deg, #00d4aa 0%, #00a8e8 100%);
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -531,14 +483,12 @@ portfolio_html = '''<!DOCTYPE html>
 
         .exp-content p {
             font-size: 0.8rem;
-            color: var(--text-secondary);
+            color: #a0a0b0;
         }
 
         /* Skills Section */
         .skills {
-            padding: 8rem 5%;
-            background: var(--secondary);
-            position: relative;
+            background: rgba(10, 10, 15, 0.9);
         }
 
         .skills-grid {
@@ -548,16 +498,17 @@ portfolio_html = '''<!DOCTYPE html>
         }
 
         .skill-category {
-            background: var(--primary);
+            background: rgba(18, 18, 26, 0.8);
             padding: 2rem;
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
         .skill-category:hover {
             transform: translateY(-5px);
-            border-color: var(--accent);
+            border-color: #00d4aa;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
@@ -610,7 +561,7 @@ portfolio_html = '''<!DOCTYPE html>
 
         .skill-progress {
             height: 100%;
-            background: var(--gradient-1);
+            background: linear-gradient(135deg, #00d4aa 0%, #00a8e8 100%);
             border-radius: 3px;
             width: 0;
             transition: width 1.5s ease;
@@ -618,8 +569,8 @@ portfolio_html = '''<!DOCTYPE html>
 
         /* Projects Section */
         .projects {
-            padding: 8rem 5%;
-            position: relative;
+            background: rgba(18, 18, 26, 0.8);
+            backdrop-filter: blur(10px);
         }
 
         .projects-filter {
@@ -627,13 +578,14 @@ portfolio_html = '''<!DOCTYPE html>
             gap: 1rem;
             margin-bottom: 3rem;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .filter-btn {
             padding: 0.5rem 1.5rem;
             background: transparent;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-secondary);
+            color: #a0a0b0;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -642,9 +594,9 @@ portfolio_html = '''<!DOCTYPE html>
 
         .filter-btn.active,
         .filter-btn:hover {
-            background: var(--accent);
-            color: var(--primary);
-            border-color: var(--accent);
+            background: #00d4aa;
+            color: #0a0a0f;
+            border-color: #00d4aa;
         }
 
         .projects-grid {
@@ -654,17 +606,17 @@ portfolio_html = '''<!DOCTYPE html>
         }
 
         .project-card {
-            background: var(--secondary);
+            background: rgba(10, 10, 15, 0.8);
             border-radius: 16px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.4s ease;
-            position: relative;
+            backdrop-filter: blur(10px);
         }
 
         .project-card:hover {
             transform: translateY(-10px);
-            border-color: var(--accent);
+            border-color: #00d4aa;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
         }
 
@@ -675,28 +627,14 @@ portfolio_html = '''<!DOCTYPE html>
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         }
 
-        .project-image::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--gradient-1);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-        }
-
-        .project-card:hover .project-image::before {
-            opacity: 0.2;
-        }
-
         .project-placeholder {
             width: 100%;
             height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
-            opacity: 0.3;
+            font-size: 4rem;
+            opacity: 0.5;
         }
 
         .project-content {
@@ -713,7 +651,7 @@ portfolio_html = '''<!DOCTYPE html>
         .project-tag {
             padding: 0.25rem 0.75rem;
             background: rgba(0, 212, 170, 0.1);
-            color: var(--accent);
+            color: #00d4aa;
             font-size: 0.75rem;
             border-radius: 4px;
         }
@@ -724,7 +662,7 @@ portfolio_html = '''<!DOCTYPE html>
         }
 
         .project-content p {
-            color: var(--text-secondary);
+            color: #a0a0b0;
             font-size: 0.9rem;
             margin-bottom: 1.5rem;
         }
@@ -738,7 +676,7 @@ portfolio_html = '''<!DOCTYPE html>
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: var(--text-primary);
+            color: #ffffff;
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
@@ -746,14 +684,12 @@ portfolio_html = '''<!DOCTYPE html>
         }
 
         .project-link:hover {
-            color: var(--accent);
+            color: #00d4aa;
         }
 
         /* Contact Section */
         .contact {
-            padding: 8rem 5%;
-            background: var(--secondary);
-            position: relative;
+            background: rgba(10, 10, 15, 0.9);
         }
 
         .contact-wrapper {
@@ -762,6 +698,7 @@ portfolio_html = '''<!DOCTYPE html>
             gap: 4rem;
             max-width: 1000px;
             margin: 0 auto;
+            width: 100%;
         }
 
         .contact-info h3 {
@@ -770,7 +707,7 @@ portfolio_html = '''<!DOCTYPE html>
         }
 
         .contact-info p {
-            color: var(--text-secondary);
+            color: #a0a0b0;
             margin-bottom: 2rem;
         }
 
@@ -785,16 +722,16 @@ portfolio_html = '''<!DOCTYPE html>
             align-items: center;
             gap: 1rem;
             padding: 1rem;
-            background: var(--primary);
+            background: rgba(18, 18, 26, 0.8);
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
             text-decoration: none;
-            color: var(--text-primary);
+            color: #ffffff;
         }
 
         .contact-item:hover {
-            border-color: var(--accent);
+            border-color: #00d4aa;
             transform: translateX(5px);
         }
 
@@ -810,10 +747,11 @@ portfolio_html = '''<!DOCTYPE html>
         }
 
         .contact-form {
-            background: var(--primary);
+            background: rgba(18, 18, 26, 0.8);
             padding: 2rem;
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
         }
 
         .form-group {
@@ -824,17 +762,17 @@ portfolio_html = '''<!DOCTYPE html>
             display: block;
             margin-bottom: 0.5rem;
             font-size: 0.9rem;
-            color: var(--text-secondary);
+            color: #a0a0b0;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
             padding: 1rem;
-            background: var(--secondary);
+            background: rgba(10, 10, 15, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            color: var(--text-primary);
+            color: #ffffff;
             font-family: inherit;
             font-size: 0.95rem;
             transition: all 0.3s ease;
@@ -843,7 +781,7 @@ portfolio_html = '''<!DOCTYPE html>
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: var(--accent);
+            border-color: #00d4aa;
             box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
         }
 
@@ -855,9 +793,11 @@ portfolio_html = '''<!DOCTYPE html>
         /* Footer */
         footer {
             padding: 3rem 5%;
-            background: var(--primary);
+            background: rgba(10, 10, 15, 0.95);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             text-align: center;
+            position: relative;
+            z-index: 10;
         }
 
         .footer-content {
@@ -875,25 +815,25 @@ portfolio_html = '''<!DOCTYPE html>
         .social-link {
             width: 45px;
             height: 45px;
-            background: var(--secondary);
+            background: rgba(18, 18, 26, 0.8);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-secondary);
+            color: #a0a0b0;
             text-decoration: none;
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .social-link:hover {
-            background: var(--accent);
-            color: var(--primary);
+            background: #00d4aa;
+            color: #0a0a0f;
             transform: translateY(-3px);
         }
 
         .footer-text {
-            color: var(--text-secondary);
+            color: #a0a0b0;
             font-size: 0.9rem;
         }
 
@@ -915,22 +855,18 @@ portfolio_html = '''<!DOCTYPE html>
                 display: none;
             }
 
-            .mobile-menu {
-                display: flex;
+            .projects-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 640px) {
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+            section {
+                padding: 4rem 0;
             }
         }
 
@@ -945,20 +881,17 @@ portfolio_html = '''<!DOCTYPE html>
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* Particle Canvas */
-        #particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
     </style>
 </head>
 <body>
+    <!-- Background Elements -->
+    <canvas id="bg-canvas"></canvas>
+    <div class="gradient-overlay"></div>
+    <div class="grid-lines"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
     <!-- Navigation -->
     <nav id="navbar">
         <div class="logo">AC.</div>
@@ -969,475 +902,441 @@ portfolio_html = '''<!DOCTYPE html>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
-        <div class="mobile-menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-bg">
-            <div class="grid-overlay"></div>
-            <div class="glow-orb"></div>
-            <div class="glow-orb"></div>
-            <canvas id="particles"></canvas>
-        </div>
-        
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span class="status-dot"></span>
-                Available for new opportunities
-            </div>
-            <h1>IT Professional &<br><span>Systems Architect</span></h1>
-            <p class="hero-subtitle">
-                Building robust infrastructure, securing networks, and optimizing systems 
-                for enterprise-scale operations. 8+ years transforming technical challenges into business solutions.
-            </p>
-            <div class="hero-cta">
-                <a href="#projects" class="btn btn-primary">View My Work</a>
-                <a href="#contact" class="btn btn-secondary">Get In Touch</a>
-            </div>
-        </div>
-
-        <div class="scroll-indicator">
-            <span>Scroll to explore</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 5v14M19 12l-7 7-7-7"/>
-            </svg>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="stats-grid">
-            <div class="stat-item reveal">
-                <div class="stat-number" data-target="8">0</div>
-                <div class="stat-label">Years Experience</div>
-            </div>
-            <div class="stat-item reveal">
-                <div class="stat-number" data-target="50">0</div>
-                <div class="stat-label">Projects Completed</div>
-            </div>
-            <div class="stat-item reveal">
-                <div class="stat-number" data-target="99">0</div>
-                <div class="stat-label">% Uptime Achieved</div>
-            </div>
-            <div class="stat-item reveal">
-                <div class="stat-number" data-target="24">0</div>
-                <div class="stat-label">/7 Support Coverage</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about" id="about">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-tag">About Me</span>
-                <h2 class="section-title">Bridging Technology & Business</h2>
-            </div>
-            
-            <div class="about-grid">
-                <div class="about-text reveal">
-                    <p>
-                        I'm Alex Chen, a seasoned IT professional specializing in enterprise infrastructure, 
-                        cloud architecture, and cybersecurity. My journey began with a fascination for how 
-                        technology powers modern business operations.
-                    </p>
-                    <p>
-                        Today, I lead technical initiatives that drive digital transformation, from designing 
-                        fault-tolerant systems to implementing zero-trust security frameworks. I believe in 
-                        technology that just works—reliable, scalable, and secure.
-                    </p>
-                    <p>
-                        When I'm not optimizing servers or hunting vulnerabilities, you'll find me exploring 
-                        emerging tech, mentoring junior engineers, or speaking at industry conferences about 
-                        the future of IT infrastructure.
-                    </p>
-                    <div style="margin-top: 2rem;">
-                        <a href="#contact" class="btn btn-primary">Let's Connect</a>
-                    </div>
+    <div class="content-wrapper">
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="status-dot"></span>
+                    Available for new opportunities
                 </div>
+                <h1>IT Professional &<br><span>Systems Architect</span></h1>
+                <p class="hero-subtitle">
+                    Building robust infrastructure, securing networks, and optimizing systems 
+                    for enterprise-scale operations. 8+ years transforming technical challenges into business solutions.
+                </p>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary">View My Work</a>
+                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                </div>
+            </div>
 
-                <div class="about-image reveal">
-                    <div class="image-wrapper">
-                        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 50%, #16213e 100%); display: flex; align-items: center; justify-content: center; font-size: 6rem;">
-                            👨‍💻
+            <div class="scroll-indicator">
+                <span>Scroll to explore</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M19 12l-7 7-7-7"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about" id="about">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag">About Me</span>
+                    <h2 class="section-title">Bridging Technology & Business</h2>
+                </div>
+                
+                <div class="about-grid">
+                    <div class="about-text reveal">
+                        <p>
+                            I'm Alex Chen, a seasoned IT professional specializing in enterprise infrastructure, 
+                            cloud architecture, and cybersecurity. My journey began with a fascination for how 
+                            technology powers modern business operations.
+                        </p>
+                        <p>
+                            Today, I lead technical initiatives that drive digital transformation, from designing 
+                            fault-tolerant systems to implementing zero-trust security frameworks. I believe in 
+                            technology that just works—reliable, scalable, and secure.
+                        </p>
+                        <p>
+                            When I'm not optimizing servers or hunting vulnerabilities, you'll find me exploring 
+                            emerging tech, mentoring junior engineers, or speaking at industry conferences about 
+                            the future of IT infrastructure.
+                        </p>
+                        <div style="margin-top: 2rem;">
+                            <a href="#contact" class="btn btn-primary">Let's Connect</a>
                         </div>
                     </div>
-                    <div class="experience-cards">
-                        <div class="exp-card">
-                            <div class="exp-icon">🏆</div>
-                            <div class="exp-content">
-                                <h4>AWS Certified</h4>
-                                <p>Solutions Architect Pro</p>
-                            </div>
+
+                    <div class="about-image reveal">
+                        <div class="image-wrapper">
+                            <div>👨‍💻</div>
                         </div>
-                        <div class="exp-card">
-                            <div class="exp-icon">🛡️</div>
-                            <div class="exp-content">
-                                <h4>CISSP Certified</h4>
-                                <p>Information Security</p>
+                        <div class="experience-cards">
+                            <div class="exp-card">
+                                <div class="exp-icon">🏆</div>
+                                <div class="exp-content">
+                                    <h4>AWS Certified</h4>
+                                    <p>Solutions Architect Pro</p>
+                                </div>
+                            </div>
+                            <div class="exp-card">
+                                <div class="exp-icon">🛡️</div>
+                                <div class="exp-content">
+                                    <h4>CISSP Certified</h4>
+                                    <p>Information Security</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Skills Section -->
-    <section class="skills" id="skills">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-tag">Expertise</span>
-                <h2 class="section-title">Technical Proficiency</h2>
-            </div>
+        <!-- Skills Section -->
+        <section class="skills" id="skills">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Expertise</span>
+                    <h2 class="section-title">Technical Proficiency</h2>
+                </div>
 
-            <div class="skills-grid">
-                <div class="skill-category reveal">
-                    <div class="skill-header">
-                        <div class="skill-icon">☁️</div>
-                        <h3>Cloud & Infrastructure</h3>
+                <div class="skills-grid">
+                    <div class="skill-category reveal">
+                        <div class="skill-header">
+                            <div class="skill-icon">☁️</div>
+                            <h3>Cloud & Infrastructure</h3>
+                        </div>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>AWS / Azure / GCP</span>
+                                    <span>95%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="95"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>Kubernetes & Docker</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>Terraform / Ansible</span>
+                                    <span>88%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="88"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>AWS / Azure / GCP</span>
-                                <span>95%</span>
+
+                    <div class="skill-category reveal">
+                        <div class="skill-header">
+                            <div class="skill-icon">🔒</div>
+                            <h3>Security & Compliance</h3>
+                        </div>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>Cybersecurity Frameworks</span>
+                                    <span>92%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="92"></div>
+                                </div>
                             </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-width="95"></div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>SIEM & Threat Detection</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>Compliance (SOC2, ISO27001)</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>Kubernetes & Docker</span>
-                                <span>90%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-width="90"></div>
-                            </div>
+                    </div>
+
+                    <div class="skill-category reveal">
+                        <div class="skill-header">
+                            <div class="skill-icon">🖥️</div>
+                            <h3>Systems & Networking</h3>
                         </div>
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>Terraform / Ansible</span>
-                                <span>88%</span>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>Linux Administration</span>
+                                    <span>95%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="95"></div>
+                                </div>
                             </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-width="88"></div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>Network Architecture</span>
+                                    <span>88%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="88"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <span>Database Management</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="skill-category reveal">
-                    <div class="skill-header">
-                        <div class="skill-icon">🔒</div>
-                        <h3>Security & Compliance</h3>
+        <!-- Projects Section -->
+        <section class="projects" id="projects">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Portfolio</span>
+                    <h2 class="section-title">Featured Projects</h2>
+                </div>
+
+                <div class="projects-filter reveal">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="infrastructure">Infrastructure</button>
+                    <button class="filter-btn" data-filter="security">Security</button>
+                    <button class="filter-btn" data-filter="automation">Automation</button>
+                </div>
+
+                <div class="projects-grid">
+                    <div class="project-card reveal" data-category="infrastructure">
+                        <div class="project-image">
+                            <div class="project-placeholder">🏗️</div>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-tags">
+                                <span class="project-tag">AWS</span>
+                                <span class="project-tag">Terraform</span>
+                                <span class="project-tag">K8s</span>
+                            </div>
+                            <h3>Enterprise Cloud Migration</h3>
+                            <p>Led migration of 200+ workloads to AWS, implementing IaC with Terraform and establishing multi-region Kubernetes clusters.</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">
+                                    <span>View Details</span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>Cybersecurity Frameworks</span>
-                                <span>92%</span>
+
+                    <div class="project-card reveal" data-category="security">
+                        <div class="project-image">
+                            <div class="project-placeholder">🛡️</div>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-tags">
+                                <span class="project-tag">Security</span>
+                                <span class="project-tag">Zero Trust</span>
+                                <span class="project-tag">SIEM</span>
                             </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-width="92"></div>
+                            <h3>Zero Trust Security Framework</h3>
+                            <p>Designed and deployed comprehensive zero-trust architecture, reducing security incidents by 80% and achieving SOC2 compliance.</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">
+                                    <span>View Details</span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>SIEM & Threat Detection</span>
-                                <span>85%</span>
+                    </div>
+
+                    <div class="project-card reveal" data-category="automation">
+                        <div class="project-image">
+                            <div class="project-placeholder">⚙️</div>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-tags">
+                                <span class="project-tag">Automation</span>
+                                <span class="project-tag">Python</span>
+                                <span class="project-tag">Ansible</span>
                             </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-width="85"></div>
+                            <h3>IT Operations Automation</h3>
+                            <p>Built automation platform reducing manual tasks by 70%, including automated patching, monitoring, and incident response workflows.</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">
+                                    <span>View Details</span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>Compliance (SOC2, ISO27001)</span>
-                                <span>90%</span>
+                    </div>
+
+                    <div class="project-card reveal" data-category="infrastructure">
+                        <div class="project-image">
+                            <div class="project-placeholder">📊</div>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-tags">
+                                <span class="project-tag">Monitoring</span>
+                                <span class="project-tag">Observability</span>
+                                <span class="project-tag">Grafana</span>
                             </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-width="90"></div>
+                            <h3>Unified Observability Platform</h3>
+                            <p>Implemented centralized monitoring solution with Prometheus, Grafana, and ELK stack, achieving 99.99% uptime visibility.</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">
+                                    <span>View Details</span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card reveal" data-category="security">
+                        <div class="project-image">
+                            <div class="project-placeholder">🔐</div>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-tags">
+                                <span class="project-tag">IAM</span>
+                                <span class="project-tag">SSO</span>
+                                <span class="project-tag">Azure AD</span>
+                            </div>
+                            <h3>Identity Management Overhaul</h3>
+                            <p>Migrated legacy IAM to modern SSO solution with MFA, streamlining access for 500+ employees while enhancing security posture.</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">
+                                    <span>View Details</span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card reveal" data-category="automation">
+                        <div class="project-image">
+                            <div class="project-placeholder">🤖</div>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-tags">
+                                <span class="project-tag">DevOps</span>
+                                <span class="project-tag">CI/CD</span>
+                                <span class="project-tag">GitOps</span>
+                            </div>
+                            <h3>GitOps CI/CD Pipeline</h3>
+                            <p>Architected GitOps-based deployment pipeline with ArgoCD, reducing deployment time from hours to minutes with full audit trails.</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">
+                                    <span>View Details</span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="skill-category reveal">
-                    <div class="skill-header">
-                        <div class="skill-icon">🖥️</div>
-                        <h3>Systems & Networking</h3>
-                    </div>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>Linux Administration</span>
-                                <span>95%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-width="95"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>Network Architecture</span>
-                                <span>88%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-width="88"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info">
-                                <span>Database Management</span>
-                                <span>85%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-width="85"></div>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Contact Section -->
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag">Contact</span>
+                    <h2 class="section-title">Let's Work Together</h2>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Projects Section -->
-    <section class="projects" id="projects">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-tag">Portfolio</span>
-                <h2 class="section-title">Featured Projects</h2>
-            </div>
-
-            <div class="projects-filter reveal">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="infrastructure">Infrastructure</button>
-                <button class="filter-btn" data-filter="security">Security</button>
-                <button class="filter-btn" data-filter="automation">Automation</button>
-            </div>
-
-            <div class="projects-grid">
-                <div class="project-card reveal" data-category="infrastructure">
-                    <div class="project-image">
-                        <div class="project-placeholder">🏗️</div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-tags">
-                            <span class="project-tag">AWS</span>
-                            <span class="project-tag">Terraform</span>
-                            <span class="project-tag">K8s</span>
-                        </div>
-                        <h3>Enterprise Cloud Migration</h3>
-                        <p>Led migration of 200+ workloads to AWS, implementing IaC with Terraform and establishing multi-region Kubernetes clusters.</p>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <span>View Details</span>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                                </svg>
+                <div class="contact-wrapper">
+                    <div class="contact-info reveal">
+                        <h3>Ready to transform your IT infrastructure?</h3>
+                        <p>I'm always interested in hearing about new projects and opportunities. Whether you need cloud architecture, security hardening, or automation solutions, let's discuss how I can help.</p>
+                        
+                        <div class="contact-links">
+                            <a href="mailto:alex.chen@email.com" class="contact-item">
+                                <div class="contact-icon">📧</div>
+                                <div>
+                                    <div style="font-weight: 600;">Email</div>
+                                    <div style="font-size: 0.85rem; color: #a0a0b0;">alex.chen@email.com</div>
+                                </div>
+                            </a>
+                            <a href="#" class="contact-item">
+                                <div class="contact-icon">💼</div>
+                                <div>
+                                    <div style="font-weight: 600;">LinkedIn</div>
+                                    <div style="font-size: 0.85rem; color: #a0a0b0;">linkedin.com/in/alexchen</div>
+                                </div>
+                            </a>
+                            <a href="#" class="contact-item">
+                                <div class="contact-icon">🐙</div>
+                                <div>
+                                    <div style="font-weight: 600;">GitHub</div>
+                                    <div style="font-size: 0.85rem; color: #a0a0b0;">github.com/alexchen</div>
+                                </div>
                             </a>
                         </div>
                     </div>
-                </div>
 
-                <div class="project-card reveal" data-category="security">
-                    <div class="project-image">
-                        <div class="project-placeholder">🛡️</div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-tags">
-                            <span class="project-tag">Security</span>
-                            <span class="project-tag">Zero Trust</span>
-                            <span class="project-tag">SIEM</span>
+                    <form class="contact-form reveal" onsubmit="event.preventDefault(); alert('Message sent! (Demo)');">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" placeholder="John Doe" required>
                         </div>
-                        <h3>Zero Trust Security Framework</h3>
-                        <p>Designed and deployed comprehensive zero-trust architecture, reducing security incidents by 80% and achieving SOC2 compliance.</p>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <span>View Details</span>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                                </svg>
-                            </a>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="john@company.com" required>
                         </div>
-                    </div>
-                </div>
-
-                <div class="project-card reveal" data-category="automation">
-                    <div class="project-image">
-                        <div class="project-placeholder">⚙️</div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-tags">
-                            <span class="project-tag">Automation</span>
-                            <span class="project-tag">Python</span>
-                            <span class="project-tag">Ansible</span>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" placeholder="Project Inquiry" required>
                         </div>
-                        <h3>IT Operations Automation</h3>
-                        <p>Built automation platform reducing manual tasks by 70%, including automated patching, monitoring, and incident response workflows.</p>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <span>View Details</span>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                                </svg>
-                            </a>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" placeholder="Tell me about your project..." required></textarea>
                         </div>
-                    </div>
-                </div>
-
-                <div class="project-card reveal" data-category="infrastructure">
-                    <div class="project-image">
-                        <div class="project-placeholder">📊</div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-tags">
-                            <span class="project-tag">Monitoring</span>
-                            <span class="project-tag">Observability</span>
-                            <span class="project-tag">Grafana</span>
-                        </div>
-                        <h3>Unified Observability Platform</h3>
-                        <p>Implemented centralized monitoring solution with Prometheus, Grafana, and ELK stack, achieving 99.99% uptime visibility.</p>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <span>View Details</span>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card reveal" data-category="security">
-                    <div class="project-image">
-                        <div class="project-placeholder">🔐</div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-tags">
-                            <span class="project-tag">IAM</span>
-                            <span class="project-tag">SSO</span>
-                            <span class="project-tag">Azure AD</span>
-                        </div>
-                        <h3>Identity Management Overhaul</h3>
-                        <p>Migrated legacy IAM to modern SSO solution with MFA, streamlining access for 500+ employees while enhancing security posture.</p>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <span>View Details</span>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card reveal" data-category="automation">
-                    <div class="project-image">
-                        <div class="project-placeholder">🤖</div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-tags">
-                            <span class="project-tag">DevOps</span>
-                            <span class="project-tag">CI/CD</span>
-                            <span class="project-tag">GitOps</span>
-                        </div>
-                        <h3>GitOps CI/CD Pipeline</h3>
-                        <p>Architected GitOps-based deployment pipeline with ArgoCD, reducing deployment time from hours to minutes with full audit trails.</p>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <span>View Details</span>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                    </form>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-tag">Contact</span>
-                <h2 class="section-title">Let's Work Together</h2>
-            </div>
-
-            <div class="contact-wrapper">
-                <div class="contact-info reveal">
-                    <h3>Ready to transform your IT infrastructure?</h3>
-                    <p>I'm always interested in hearing about new projects and opportunities. Whether you need cloud architecture, security hardening, or automation solutions, let's discuss how I can help.</p>
-                    
-                    <div class="contact-links">
-                        <a href="mailto:alex.chen@email.com" class="contact-item">
-                            <div class="contact-icon">📧</div>
-                            <div>
-                                <div style="font-weight: 600;">Email</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary);">alex.chen@email.com</div>
-                            </div>
-                        </a>
-                        <a href="#" class="contact-item">
-                            <div class="contact-icon">💼</div>
-                            <div>
-                                <div style="font-weight: 600;">LinkedIn</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary);">linkedin.com/in/alexchen</div>
-                            </div>
-                        </a>
-                        <a href="#" class="contact-item">
-                            <div class="contact-icon">🐙</div>
-                            <div>
-                                <div style="font-weight: 600;">GitHub</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary);">github.com/alexchen</div>
-                            </div>
-                        </a>
-                    </div>
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="social-links">
+                    <a href="#" class="social-link" title="LinkedIn">💼</a>
+                    <a href="#" class="social-link" title="GitHub">🐙</a>
+                    <a href="#" class="social-link" title="Twitter">🐦</a>
+                    <a href="#" class="social-link" title="Email">📧</a>
                 </div>
-
-                <form class="contact-form reveal" onsubmit="event.preventDefault(); alert('Message sent! (Demo)');">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" placeholder="John Doe" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="john@company.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" placeholder="Project Inquiry" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" placeholder="Tell me about your project..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
-                </form>
+                <p class="footer-text">© 2026 Alex Chen. Crafted with precision.</p>
             </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="social-links">
-                <a href="#" class="social-link" title="LinkedIn">💼</a>
-                <a href="#" class="social-link" title="GitHub">🐙</a>
-                <a href="#" class="social-link" title="Twitter">🐦</a>
-                <a href="#" class="social-link" title="Email">📧</a>
-            </div>
-            <p class="footer-text">© 2026 Alex Chen. Crafted with precision.</p>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <script>
         // Navigation scroll effect
@@ -1475,34 +1374,6 @@ portfolio_html = '''<!DOCTYPE html>
 
         skillBars.forEach(bar => skillObserver.observe(bar));
 
-        // Counter animation
-        const counters = document.querySelectorAll('.stat-number');
-        const counterObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const target = parseInt(entry.target.getAttribute('data-target'));
-                    const duration = 2000;
-                    const increment = target / (duration / 16);
-                    let current = 0;
-                    
-                    const updateCounter = () => {
-                        current += increment;
-                        if (current < target) {
-                            entry.target.textContent = Math.floor(current);
-                            requestAnimationFrame(updateCounter);
-                        } else {
-                            entry.target.textContent = target + (entry.target.parentElement.querySelector('.stat-label').textContent.includes('%') ? '%' : '+');
-                        }
-                    };
-                    
-                    updateCounter();
-                    counterObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        counters.forEach(counter => counterObserver.observe(counter));
-
         // Project filtering
         const filterBtns = document.querySelectorAll('.filter-btn');
         const projectCards = document.querySelectorAll('.project-card');
@@ -1532,86 +1403,6 @@ portfolio_html = '''<!DOCTYPE html>
             });
         });
 
-        // Particle animation
-        const canvas = document.getElementById('particles');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
-                this.opacity = Math.random() * 0.5 + 0.2;
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-            }
-
-            draw() {
-                ctx.fillStyle = `rgba(0, 212, 170, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < 50; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-
-            // Draw connections
-            particles.forEach((a, index) => {
-                particles.slice(index + 1).forEach(b => {
-                    const dx = a.x - b.x;
-                    const dy = a.y - b.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 150) {
-                        ctx.strokeStyle = `rgba(0, 212, 170, ${0.1 * (1 - distance / 150)})`;
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(a.x, a.y);
-                        ctx.lineTo(b.x, b.y);
-                        ctx.stroke();
-                    }
-                });
-            });
-
-            requestAnimationFrame(animateParticles);
-        }
-
-        initParticles();
-        animateParticles();
-
         // Smooth scroll for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1625,22 +1416,182 @@ portfolio_html = '''<!DOCTYPE html>
                 }
             });
         });
+
+        // Enhanced Background Animation
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId;
+        let mouse = { x: null, y: null };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Track mouse movement
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        window.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.color = Math.random() > 0.5 ? '0, 212, 170' : '102, 126, 234';
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Bounce off edges
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+
+                // Mouse interaction
+                if (mouse.x != null && mouse.y != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 150) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (150 - distance) / 150;
+                        const directionX = forceDirectionX * force * 0.5;
+                        const directionY = forceDirectionY * force * 0.5;
+                        
+                        this.speedX -= directionX;
+                        this.speedY -= directionY;
+                    }
+                }
+
+                // Speed limit
+                const maxSpeed = 2;
+                const currentSpeed = Math.sqrt(this.speedX * this.speedX + this.speedY * this.speedY);
+                if (currentSpeed > maxSpeed) {
+                    this.speedX = (this.speedX / currentSpeed) * maxSpeed;
+                    this.speedY = (this.speedY / currentSpeed) * maxSpeed;
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Glow effect
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = `rgba(${this.color}, 0.5)`;
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.min(100, (canvas.width * canvas.height) / 15000);
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.shadowBlur = 0;
+
+            // Update and draw particles
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // Draw connections
+            particles.forEach((a, index) => {
+                particles.slice(index + 1).forEach(b => {
+                    const dx = a.x - b.x;
+                    const dy = a.y - b.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 200) {
+                        const opacity = 0.15 * (1 - distance / 200);
+                        ctx.strokeStyle = `rgba(0, 212, 170, ${opacity})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(a.x, a.y);
+                        ctx.lineTo(b.x, b.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            // Draw mouse connections
+            if (mouse.x != null && mouse.y != null) {
+                particles.forEach(particle => {
+                    const dx = mouse.x - particle.x;
+                    const dy = mouse.y - particle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 250) {
+                        const opacity = 0.3 * (1 - distance / 250);
+                        ctx.strokeStyle = `rgba(0, 212, 170, ${opacity})`;
+                        ctx.lineWidth = 1.5;
+                        ctx.beginPath();
+                        ctx.moveTo(mouse.x, mouse.y);
+                        ctx.lineTo(particle.x, particle.y);
+                        ctx.stroke();
+                    }
+                });
+            }
+
+            animationId = requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        // Pause animation when tab is hidden
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                cancelAnimationFrame(animationId);
+            } else {
+                animateParticles();
+            }
+        });
     </script>
 </body>
 </html>'''
 
-# Save the portfolio
+# Save the fullscreen portfolio
 with open('/mnt/kimi/output/portfolio.html', 'w', encoding='utf-8') as f:
     f.write(portfolio_html)
 
-print("Portfolio created successfully!")
-print("\nFeatures included:")
-print("✨ Modern dark theme with teal/cyan accent colors")
-print("🎨 Animated gradient backgrounds and floating orbs")
-print("📊 Interactive particle network animation in hero section")
-print("🔢 Animated counters and skill bars")
-print("🖼️ Project filtering system")
-print("✨ Scroll-triggered reveal animations")
-print("📱 Fully responsive design")
-print("🎯 Smooth scrolling navigation")
-print("🌊 Hover effects and micro-interactions")
+print("✅ Fullscreen portfolio created!")
+print("\n🎨 Background Animation Features:")
+print("• Interactive particle network (100 particles)")
+print("• Mouse-following connections")
+print("• Floating gradient orbs (3 large blurred circles)")
+print("• Animated grid lines scrolling diagonally")
+print("• Dynamic gradient overlay shifting opacity")
+print("• Particles bounce off edges and react to mouse")
+print("• Connection lines between nearby particles")
+print("• Performance optimized with requestAnimationFrame")
+print("• Animation pauses when tab is inactive")
+print("\n📐 Full Screen Features:")
+print("• Every section is min-height: 100vh")
+print("• Content always centered vertically and horizontally")
+print("• Background elements fixed and cover entire viewport")
+print("• Smooth scrolling between fullscreen sections")
