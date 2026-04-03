@@ -1,4 +1,9 @@
 
+import os
+
+# Create output directory if it doesn't exist
+os.makedirs('/mnt/kimi/output', exist_ok=True)
+
 portfolio_html = '''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -410,48 +415,65 @@ portfolio_html = '''<!DOCTYPE html>
             margin-bottom: 1.5rem;
         }
 
+        /* Profile Image Container - FIXED */
         .about-image {
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .image-wrapper {
             position: relative;
+            width: 320px;
+            height: 400px;
             border-radius: 20px;
             overflow: hidden;
+            border: 2px solid rgba(0, 212, 170, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             background: #12121a;
-            aspect-ratio: 4/5;
-            border: 1px solid rgba(0, 212, 170, 0.2);
         }
 
-        .image-wrapper > div {
+        .image-wrapper img {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 50%, #16213e 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 6rem;
+            object-fit: cover;
+            filter: grayscale(20%);
+            transition: all 0.5s ease;
         }
 
-        .experience-cards {
-            position: absolute;
-            bottom: -30px;
-            left: -30px;
+        .image-wrapper:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        /* Certification Cards - FIXED POSITIONING */
+        .certifications {
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 320px;
         }
 
-        .exp-card {
-            background: #0a0a0f;
-            padding: 1rem 1.5rem;
+        .cert-card {
+            background: rgba(10, 10, 15, 0.9);
+            padding: 1rem 1.25rem;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 212, 170, 0.2);
             display: flex;
             align-items: center;
             gap: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
             animation: slideIn 0.8s ease;
+        }
+
+        .cert-card:hover {
+            transform: translateX(10px);
+            border-color: #00d4aa;
+            box-shadow: 0 5px 20px rgba(0, 212, 170, 0.2);
         }
 
         @keyframes slideIn {
@@ -465,23 +487,25 @@ portfolio_html = '''<!DOCTYPE html>
             }
         }
 
-        .exp-icon {
-            width: 40px;
-            height: 40px;
+        .cert-icon {
+            width: 44px;
+            height: 44px;
             background: linear-gradient(135deg, #00d4aa 0%, #00a8e8 100%);
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            flex-shrink: 0;
         }
 
-        .exp-content h4 {
-            font-size: 0.9rem;
+        .cert-content h4 {
+            font-size: 0.95rem;
             margin-bottom: 0.2rem;
+            color: #ffffff;
         }
 
-        .exp-content p {
+        .cert-content p {
             font-size: 0.8rem;
             color: #a0a0b0;
         }
@@ -844,11 +868,17 @@ portfolio_html = '''<!DOCTYPE html>
                 grid-template-columns: 1fr;
             }
 
-            .experience-cards {
-                position: relative;
-                bottom: auto;
-                left: auto;
-                margin-top: 2rem;
+            .about-image {
+                order: -1;
+            }
+
+            .image-wrapper {
+                width: 280px;
+                height: 350px;
+            }
+
+            .certifications {
+                max-width: 280px;
             }
 
             .nav-links {
@@ -867,6 +897,11 @@ portfolio_html = '''<!DOCTYPE html>
 
             section {
                 padding: 4rem 0;
+            }
+
+            .image-wrapper {
+                width: 240px;
+                height: 300px;
             }
         }
 
@@ -962,20 +997,25 @@ portfolio_html = '''<!DOCTYPE html>
                     </div>
 
                     <div class="about-image reveal">
+                        <!-- FIXED: Professional Profile Image -->
                         <div class="image-wrapper">
-                            <div>👨‍💻</div>
+                            <img src="https://kimi-web-img.moonshot.cn/img/img.freepik.com/40409df18a65673c4cd9d35d5db749f89671f847.jpg" 
+                                 alt="Alex Chen - IT Professional" 
+                                 onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop'">
                         </div>
-                        <div class="experience-cards">
-                            <div class="exp-card">
-                                <div class="exp-icon">🏆</div>
-                                <div class="exp-content">
+                        
+                        <!-- FIXED: Certification Cards Below Image -->
+                        <div class="certifications">
+                            <div class="cert-card">
+                                <div class="cert-icon">🏆</div>
+                                <div class="cert-content">
                                     <h4>AWS Certified</h4>
                                     <p>Solutions Architect Pro</p>
                                 </div>
                             </div>
-                            <div class="exp-card">
-                                <div class="exp-icon">🛡️</div>
-                                <div class="exp-content">
+                            <div class="cert-card">
+                                <div class="cert-icon">🛡️</div>
+                                <div class="cert-content">
                                     <h4>CISSP Certified</h4>
                                     <p>Information Security</p>
                                 </div>
@@ -1575,23 +1615,17 @@ portfolio_html = '''<!DOCTYPE html>
 </body>
 </html>'''
 
-# Save the fullscreen portfolio
+# Save the updated portfolio
 with open('/mnt/kimi/output/portfolio.html', 'w', encoding='utf-8') as f:
     f.write(portfolio_html)
 
-print("✅ Fullscreen portfolio created!")
-print("\n🎨 Background Animation Features:")
-print("• Interactive particle network (100 particles)")
-print("• Mouse-following connections")
-print("• Floating gradient orbs (3 large blurred circles)")
-print("• Animated grid lines scrolling diagonally")
-print("• Dynamic gradient overlay shifting opacity")
-print("• Particles bounce off edges and react to mouse")
-print("• Connection lines between nearby particles")
-print("• Performance optimized with requestAnimationFrame")
-print("• Animation pauses when tab is inactive")
-print("\n📐 Full Screen Features:")
-print("• Every section is min-height: 100vh")
-print("• Content always centered vertically and horizontally")
-print("• Background elements fixed and cover entire viewport")
-print("• Smooth scrolling between fullscreen sections")
+print("✅ Profile picture section FIXED!")
+print("\n🔧 Changes made:")
+print("• Added professional headshot image with dark background")
+print("• Fixed image container size (320x400px) with proper border")
+print("• Added fallback image in case primary fails to load")
+print("• Moved certification cards BELOW the profile image (not overlapping)")
+print("• Improved card styling with hover effects")
+print("• Added responsive sizing for mobile devices")
+print("• Image has subtle grayscale filter that removes on hover")
+print("• Added teal glow border around profile image")
